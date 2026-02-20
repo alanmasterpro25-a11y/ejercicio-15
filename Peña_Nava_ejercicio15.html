@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peña Nava Alan Abraham - Ejercicio 15</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue: #003366;
+            --gold: #b38e5d;
+            --gold-light: #e8d5b7;
+            --ink: #1a1a2e;
+            --paper: #faf8f4;
+            --rule: #d4c9b5;
+            --red: #c0392b;
+            --green: #1a6b3c;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
+            background: #d0cfc9;
+            background-image: 
+                repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(0,0,0,0.04) 28px),
+                repeating-linear-gradient(90deg, transparent, transparent 27px, rgba(0,0,0,0.02) 28px);
+            min-height: 100vh;
+            padding: 24px 16px;
+        }
+
+        .page {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: var(--paper);
+            border-radius: 2px;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.25), inset 0 0 0 1px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        /* ── HEADER ── */
+        .page-header {
+            background: var(--blue);
+            color: white;
+            display: grid;
+            grid-template-columns: 120px 1fr auto;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 28px;
+            border-bottom: 4px solid var(--gold);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-circle {
+            width: 72px; height: 72px;
+            border: 3px solid var(--gold);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--gold);
+            text-align: center;
+            letter-spacing: 0.5px;
+            line-height: 1.2;
+        }
+
+        .header-text h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        .header-text h2 {
+            font-size: 13px;
+            font-weight: 300;
+            color: var(--gold-light);
+            margin-top: 2px;
+            letter-spacing: 0.5px;
+        }
+        .header-text .subtitle {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+            margin-top: 4px;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+
+        .header-badge {
+            text-align: center;
+        }
+        .header-badge .doc-title {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .header-badge .doc-num {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            line-height: 1;
+            margin-top: 2px;
+        }
+
+        /* ── TOOLBAR ── */
+        .toolbar {
+            background: var(--blue);
+            border-bottom: 2px solid var(--gold);
+            padding: 10px 28px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            color: var(--gold);
+            letter-spacing: 1px;
+            margin-right: 6px;
+        }
+
+        .btn {
+            padding: 7px 16px;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.15s;
+            letter-spacing: 0.3px;
+        }
+        .btn-add {
+            background: var(--gold);
+            color: var(--blue);
+        }
+        .btn-add:hover { background: #c9a472; }
+
+        .btn-clear-all {
+            background: transparent;
+            color: #ff8888;
+            border: 1px solid #ff888866;
+        }
+        .btn-clear-all:hover { background: rgba(255,80,80,0.15); }
+
+        .counter-pill {
+            margin-left: auto;
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.8);
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+        .counter-pill span {
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        /* ── BITÁCORA TABLE ── */
+        .bitacora-wrap {
+            padding: 0;
+            overflow-x: auto;
+        }
+
+        table.bitacora {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        table.bitacora thead tr {
+            background: #eae5dc;
+            border-bottom: 2px solid var(--rule);
+        }
+
+        table.bitacora thead th {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #666;
+            padding: 10px 8px;
+            text-align: center;
+            border-right: 1px solid var(--rule);
+            white-space: nowrap;
+        }
+        table.bitacora thead th:last-child { border-right: none; }
+
+        table.bitacora tbody tr {
+            border-bottom: 1px solid var(--rule);
+            transition: background 0.15s;
+        }
+        table.bitacora tbody tr:nth-child(even) { background: #f6f3ee; }
+        table.bitacora tbody tr:hover { background: #edf4ff; }
+
+        table.bitacora td {
+            padding: 6px 6px;
+            border-right: 1px solid #e0d8cc;
+            vertical-align: middle;
+        }
+        table.bitacora td:last-child { border-right: none; }
+
+        /* Row number */
+        td.row-num {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            color: #aaa;
+            text-align: center;
+            width: 36px;
+            background: #f0ece4;
+        }
+
+        /* Inline inputs */
+        .cell-input {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 13px;
+            color: var(--ink);
+            padding: 4px 6px;
+            border-radius: 2px;
+            transition: background 0.15s;
+            min-width: 80px;
+        }
+        .cell-input:focus {
+            outline: none;
+            background: rgba(0, 51, 102, 0.07);
+        }
+
+        .cell-select {
+            width: 100%;
+            border: none;
+            background: transparent;
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 12px;
+            color: var(--ink);
+            padding: 4px 4px;
+            cursor: pointer;
+        }
+        .cell-select:focus { outline: none; background: rgba(0,51,102,0.07); }
+
+        /* Tipo badge */
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 2px;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        .badge-alumno { background: #d6eaff; color: #003a80; }
+        .badge-profesor { background: #ffecd6; color: #7a3a00; }
+
+        /* Checkboxes grupo */
+        .check-group {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+            justify-content: center;
+        }
+        .check-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            font-size: 9px;
+            color: #888;
+            font-family: 'IBM Plex Mono', monospace;
+        }
+        .check-label input[type="checkbox"] {
+            width: 14px; height: 14px;
+            cursor: pointer;
+            accent-color: var(--blue);
+        }
+
+        /* Status column */
+        .status-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 4px;
+        }
+        .status-prestado { background: #f39c12; }
+        .status-devuelto { background: var(--green); }
+        .status-pendiente { background: #aaa; }
+
+        /* Row actions */
+        .btn-row-delete {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #ccc;
+            font-size: 16px;
+            padding: 4px 8px;
+            border-radius: 2px;
+            transition: all 0.15s;
+            line-height: 1;
+        }
+        .btn-row-delete:hover { color: var(--red); background: rgba(192,57,43,0.08); }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #bbb;
+        }
+        .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+        .empty-state p { font-size: 14px; }
+        .empty-state strong { color: var(--gold); }
+
+        /* Footer */
+        .page-footer {
+            background: #eae5dc;
+            border-top: 2px solid var(--rule);
+            padding: 12px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            color: #999;
+        }
+        .page-footer strong { color: var(--blue); }
+
+        .btn-export {
+            padding: 6px 14px;
+            background: var(--blue);
+            color: var(--gold);
+            border: none;
+            border-radius: 2px;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: all 0.15s;
+        }
+        .btn-export:hover { background: #002244; }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px; right: 24px;
+            background: var(--blue);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-size: 13px;
+            border-left: 4px solid var(--gold);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 999;
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+
+        @media (max-width: 700px) {
+            .page-header { grid-template-columns: 1fr; gap: 8px; }
+            .header-badge { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page">
+
+    <!-- HEADER -->
+    <div class="page-header">
+        <div class="logo-area">
+            <div class="logo-circle">UAS<br>FIM</div>
+        </div>
+        <div class="header-text">
+            <h1>Facultad de Ingeniería Mochis</h1>
+            <h2>Universidad Autónoma de Sinaloa</h2>
+            <div class="subtitle">Coordinación de Centros de Cómputo y Red Escolar</div>
+        </div>
+        <div class="header-badge">
+            <div class="doc-title">Bitácora</div>
+            <div class="doc-num">#001</div>
+        </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+        <span class="toolbar-label">ACCIONES:</span>
+        <button class="btn btn-add" onclick="addRow()">+ Agregar Fila</button>
+        <button class="btn btn-clear-all" onclick="clearAll()">✕ Limpiar Todo</button>
+        <div class="counter-pill">Registros: <span id="rowCount">0</span></div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="bitacora-wrap">
+        <table class="bitacora" id="bitacoraTable">
+            <thead>
+                <tr>
+                    <th style="width:36px">#</th>
+                    <th style="min-width:140px">Nombre</th>
+                    <th style="min-width:100px">Carrera</th>
+                    <th style="min-width:60px">Grupo</th>
+                    <th style="width:100px">Tipo</th>
+                    <th style="width:90px">C/G/S/IP/IN</th>
+                    <th style="min-width:160px">Equipo / Préstamo</th>
+                    <th style="width:100px">Fecha</th>
+                    <th style="width:80px">Hr. Préstamo</th>
+                    <th style="width:80px">Hr. Entrega</th>
+                    <th style="width:90px">Estado</th>
+                    <th style="min-width:130px">Observaciones</th>
+                    <th style="width:40px"></th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- rows injected by JS -->
+            </tbody>
+        </table>
+
+        <div class="empty-state" id="emptyState">
+            <div class="empty-icon">📋</div>
+            <p>No hay registros en la bitácora.<br>Haz clic en <strong>+ Agregar Fila</strong> para empezar.</p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="page-footer">
+        <span>Ejercicio 15 – <strong>Peña Nava Alan Abraham</strong></span>
+        <button class="btn-export" onclick="exportCSV()">⬇ Exportar CSV</button>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+    let rows = [];
+    let nextId = 1;
+    let rowNum = 1;
+
+    const today = new Date().toISOString().split('T')[0];
+
+    function addRow(data = {}) {
+        const id = nextId++;
+        const num = rowNum++;
+        rows.push({ id, num });
+
+        const tbody = document.getElementById('tableBody');
+        const tr = document.createElement('tr');
+        tr.id = `row-${id}`;
+        tr.dataset.id = id;
+
+        tr.innerHTML = `
+            <td class="row-num">${num}</td>
+            <td><input class="cell-input" placeholder="Nombre completo" value="${data.nombre || ''}" onchange="updateRow(${id},'nombre',this.value)"></td>
+            <td><input class="cell-input" placeholder="Ing. Software..." value="${data.carrera || ''}" onchange="updateRow(${id},'carrera',this.value)"></td>
+            <td><input class="cell-input" placeholder="1-01" style="max-width:60px" value="${data.grupo || ''}" onchange="updateRow(${id},'grupo',this.value)"></td>
+            <td>
+                <select class="cell-select" onchange="updateRow(${id},'tipo',this.value)">
+                    <option value="A" ${(data.tipo||'A')==='A'?'selected':''}>Alumno</option>
+                    <option value="P" ${data.tipo==='P'?'selected':''}>Profesor</option>
+                </select>
+            </td>
+            <td>
+                <div class="check-group">
+                    ${['C','G','S','IP','IN'].map(lbl => `
+                        <label class="check-label">
+                            <input type="checkbox" ${(data[lbl])?'checked':''} onchange="updateRow(${id},'${lbl}',this.checked)">
+                            ${lbl}
+                        </label>
+                    `).join('')}
+                </div>
+            </td>
+            <td><input class="cell-input" placeholder="Laptop Dell #14..." value="${data.equipo || ''}" onchange="updateRow(${id},'equipo',this.value)"></td>
+            <td><input class="cell-input" type="date" value="${data.fecha || today}" onchange="updateRow(${id},'fecha',this.value)"></td>
+            <td><input class="cell-input" type="time" value="${data.hr_prestamo || ''}" onchange="updateRow(${id},'hr_prestamo',this.value)"></td>
+            <td><input class="cell-input" type="time" value="${data.hr_entrega || ''}" onchange="updateRow(${id},'hr_entrega',this.value)"></td>
+            <td>
+                <select class="cell-select" onchange="updateRow(${id},'estado',this.value); updateStatus(${id}, this.value)">
+                    <option value="pendiente" ${(data.estado||'pendiente')==='pendiente'?'selected':''}>⬤ Pendiente</option>
+                    <option value="prestado"  ${data.estado==='prestado'?'selected':''}>⬤ Prestado</option>
+                    <option value="devuelto"  ${data.estado==='devuelto'?'selected':''}>⬤ Devuelto</option>
+                </select>
+            </td>
+            <td><input class="cell-input" placeholder="Notas, ralladuras..." value="${data.obs || ''}" onchange="updateRow(${id},'obs',this.value)"></td>
+            <td><button class="btn-row-delete" onclick="deleteRow(${id})" title="Eliminar fila">✕</button></td>
+        `;
+
+        tbody.appendChild(tr);
+        updateUI();
+        showToast('Fila agregada ✓');
+        tr.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function updateRow(id, field, value) {
+        const row = rows.find(r => r.id === id);
+        if (row) row[field] = value;
+    }
+
+    function updateStatus(id, value) {
+        // visual feedback could be expanded
+    }
+
+    function deleteRow(id) {
+        const tr = document.getElementById(`row-${id}`);
+        if (tr) {
+            tr.style.transition = 'opacity 0.2s, transform 0.2s';
+            tr.style.opacity = '0';
+            tr.style.transform = 'translateX(20px)';
+            setTimeout(() => { tr.remove(); updateUI(); }, 200);
+        }
+        rows = rows.filter(r => r.id !== id);
+        showToast('Fila eliminada');
+    }
+
+    function clearAll() {
+        if (rows.length === 0) return;
+        if (confirm('¿Limpiar todos los registros de la bitácora?')) {
+            document.getElementById('tableBody').innerHTML = '';
+            rows = [];
+            rowNum = 1;
+            nextId = 1;
+            updateUI();
+            showToast('Bitácora limpiada ✓');
+        }
+    }
+
+    function updateUI() {
+        const count = document.getElementById('tableBody').querySelectorAll('tr').length;
+        document.getElementById('rowCount').textContent = count;
+        document.getElementById('emptyState').style.display = count === 0 ? 'block' : 'none';
+    }
+
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2200);
+    }
+
+    function exportCSV() {
+        const headers = ['#','Nombre','Carrera','Grupo','Tipo','Equipo','Fecha','Hr.Prestamo','Hr.Entrega','Estado','Observaciones'];
+        const trs = document.getElementById('tableBody').querySelectorAll('tr');
+        if (trs.length === 0) { showToast('No hay datos para exportar'); return; }
+
+        let csv = headers.join(',') + '\n';
+        trs.forEach((tr, i) => {
+            const inputs = tr.querySelectorAll('input[type=text], input[type=date], input[type=time], select');
+            const vals = Array.from(inputs).map(el => `"${(el.value||'').replace(/"/g,'""')}"`);
+            csv += `${i+1},${vals.join(',')}\n`;
+        });
+
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const a = document.createElement('a'); 
+        a.href = URL.createObjectURL(blob);
+        a.download = 'bitacora_prestamo.csv';
+        a.click();
+        showToast('CSV exportado ✓');
+    }
+
+    // Init with 2 sample rows
+    addRow({ nombre: 'Juan Carlos Pérez López', carrera: 'Ing. en Software', grupo: '3-01', tipo: 'A', equipo: 'Laptop Dell #14', estado: 'prestado', C: true });
+    addRow({ nombre: 'Dr. Martínez Ruiz', carrera: '–', grupo: '–', tipo: 'P', equipo: 'Proyector Epson #02', estado: 'devuelto', S: true, IP: true });
+</script>
+
+</body>
+</html>
